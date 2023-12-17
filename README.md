@@ -27,7 +27,6 @@
 ## 使用开源仓库
 - https://github.com/atelier-anchor/smiley-sans LICENSE:SmileySans-Oblique_LICENSE.txt
 - https://github.com/crazywhalecc/idiom-database  LICENSE:idiom_LICENSE.txt 
-- 
 
 ## 安装
 - 下载.exe格式的文件无需安装,程序会自动安装所需文件
