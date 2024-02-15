@@ -1,6 +1,7 @@
 # Idiom solitaire
  借助于idiom-database再次开发的成语接龙软件
- 程序使用了"得意黑"字体
+ 
+ ## 请运行 Idiom_in_shell.py / Idiom_in_tk.py 建议运行第二个
 
 ## 功能
 - 成语接龙
