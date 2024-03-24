@@ -1,3 +1,4 @@
+# 声明：3~4月份我可能会拿这个项目去参加一个比赛，特此公告
 # Idiom solitaire
  借助于idiom-database再次开发的成语接龙软件
  
