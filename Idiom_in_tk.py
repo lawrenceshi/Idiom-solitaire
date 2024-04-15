@@ -1,5 +1,5 @@
-import webbrowser,threading,sys,tkinter as tk,wget,logging,os,time,random as rd,requests,pandas as pd
-from PIL import Image, ImageDraw, ImageFont, ImageTk
+import webbrowser,threading,tkinter as tk,wget,logging,os,time,random as rd,requests,pandas as pd
+from PIL import Image, ImageDraw, ImageFont
 from tkinter import ttk
 from tkinter.messagebox import showerror, showinfo
 #设置logging
@@ -49,7 +49,7 @@ class App(tk.Tk):
         self.geometry('500x225')
         self.resizable(False,False)
         logger.info("界面标题/大小/是否可伸缩")
-
+        
         #set style
         #设置style
         self.style = ttk.Style()
@@ -63,9 +63,12 @@ class App(tk.Tk):
         logger.info("提示等待下载完成label创建完成")
         info_label_3.grid(row=1,column=1,columnspan=2,sticky=tk.EW)
         #创建url变量
-        self.csv_url = 'http://code.files.lawrenceshi.space/idiom-database-master/data/idiom.csv'
+        #url变动
+        self.csv_url = 'http://files.code.lawrenceshi.space/idiom-database-master/data/idiom.csv'
         logger.info("url变量创建完成")
-
+        
+        if os.path.isfile("更新程序.exe"):
+            os.remove("更新程序.exe")
         #如果csv文件不存在
         if not os.path.isfile("idiom.csv"):
             logger.info('csv文件不存在,开始下载')
@@ -103,6 +106,21 @@ class App(tk.Tk):
         
         logger.info("界面创建完成")
 
+    def check_network(self):
+        try:
+            requests.get("http://files.code.lawrenceshi.space", timeout=5)
+            return True
+        except requests.exceptions.RequestException:
+            return False
+
+    def connect_network(self):
+        if not self.check_network():
+            showerror(title="提示", message="连接服务器失败！请检查网络连接\n如果网络连接正确可能是服务器错误，请稍后再试\n将在5秒后再次检查。")
+            time.sleep(5)
+            self.connect_network()
+        else:
+            return
+            
     #欢迎界面
     def welcome_widget(self):
         self.new_label=ttk.Label(self, text = "欢迎来到乐乐成语接龙:", style='My.TLabel')
@@ -114,7 +132,7 @@ class App(tk.Tk):
         logger.info("欢迎界面创建完成")
     #函数： 从url下载照片，并返回
     def download_image(self,url):
-
+        self.connect_network()
         #从url下载照片，把照片存成文件名"empty_zhengshu.jpg"
         filename = "empty_zhengshu.jpg"
 
@@ -146,7 +164,7 @@ class App(tk.Tk):
         open_button = tk.Button(self, text="BLOG", command=lambda: webbrowser.open("http://lawrenceshi.space"))
         open_button.grid(row = 4, column = 1, padx = 5, pady = 5, sticky=tk.EW)
 
-        github_button = tk.Button(self, text="Github", command=lambda: webbrowser.open("https://github.com/lawrenceshi"))
+        github_button = tk.Button(self, text="Github", command=lambda: webbrowser.open("https://github.com/lawrenceshi/Idiom-solitaire"))
         github_button.grid(row = 4, column = 2, padx = 5, pady = 5, sticky=tk.EW)
 
         logger.info("欢迎界面底部创建完成")
@@ -379,6 +397,7 @@ class App(tk.Tk):
     
     #下载字体程序
     def download_font(self,url, font_size=180):
+        self.connect_network()
         #下载字体，并把字体存成文件名："SmileySans-Oblique.ttf"
         filename = "SmileySans-Oblique.ttf"
         if not os.path.isfile(filename):
@@ -393,24 +412,6 @@ class App(tk.Tk):
         logger.info("返回字体")
         return font
 
-    #下载文件
-    def download_file(self,url,filename):
-        #让download全局
-        global download
-        #定义
-        download=False
-
-        #如果没有文件
-        if not os.path.isfile(filename):
-            #下载
-            logger.info("开始"+filename+"的下载")
-            print("正在下载必要文件")
-            wget.download(url, filename)
-            logger.info("下载"+filename)
-            download=True
-        else:
-            #log
-            logger.info("无需下载")
 
     #绘制文件
     def draw_text(self,image_url, text, font_url):
@@ -462,10 +463,13 @@ class App(tk.Tk):
 #下载文件进度条
 class DownloadWgetTop(tk.Toplevel):
   
-    def __init__(self, container, url, filename):
+    def __init__(self, container, url, filename, file_name_in_label=''):
         
         global logger
 
+        if file_name_in_label == "":
+            file_name_in_label = filename
+        self.file_name_in_label = file_name_in_label
         #Initial
         #初始化
         super().__init__(container)
@@ -492,11 +496,25 @@ class DownloadWgetTop(tk.Toplevel):
         download_thread = threading.Thread(target=self.__download)
         download_thread.start()
 
+    def check_network(self):
+        try:
+            requests.get("http://files.code.lawrenceshi.space", timeout=5)
+            return True
+        except requests.exceptions.RequestException:
+            return False
+
+    def connect_network(self):
+        if not self.check_network():
+            showerror(title="提示", message="连接服务器失败！请检查网络连接\n如果网络连接正确可能是服务器错误，请稍后再试\n将在5秒后再次检查。")
+            time.sleep(5)
+            self.connect_network()
+        else:
+            return
 
     def __create_widgets(self):
         
         #创建界面
-        download_label = ttk.Label( self, text= "正在下载文件 {}".format(self.filename) )
+        download_label = ttk.Label( self, text= "正在下载文件 {}".format(self.file_name_in_label) )
         download_label.grid(row = 0, column = 0, padx = 5, pady = 5, sticky='NS')
 
         self.progress_bar = ttk.Progressbar(self, orient="horizontal", length=310, mode="determinate")
@@ -511,18 +529,20 @@ class DownloadWgetTop(tk.Toplevel):
     #通过wget库下载文件
     def __download(self):
         logger.info("进入下载函数")
+        self.connect_network()
         #bar是指进度条
         wget.download(self.url, self.filename, bar= self.__update_progress_bar)
         logger.info("下载完成")
         #退出mainloop/关闭窗口
-        self.quit()
         self.destroy()
+        self.quit()
+        
         #见def __update_progress_bar
     
     #Update the progressbar
     #更新进度条函数
     def __update_progress_bar(self, current, total, width=80):
-        logger.info("进入进度条函数")
+        # logger.info("进入进度条函数")
         #计算 '已下载的字符数'/(除以)'总共的字符数' *(乘以) 100 得到百分比
         percentage = int( (current/total) * 100 )
 
@@ -537,13 +557,18 @@ class DownloadWgetTop(tk.Toplevel):
             #更新文本
             self.precent_label.config( text="100% - 下载完成" )
 
-
 if __name__ == "__main__":
-        
+    os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    # 获取程序所在路径
+    program_path = os.path.dirname(os.path.abspath(__file__))
+
+    # 打印程序所在路径
+    print("程序所在路径:", program_path)
+    v="1.2"    
     #创建logger
     logger = createLogger(filename="cyjl.log")
     logger.warning('-----------------------------程序开始/启动-----------------------------')
-    logger.info('成语接龙tk版本 1.1')
+    logger.info('成语接龙tk版本 '+v)
     logger.info('Copyright 2023-'+str(time.strftime("%Y"))+' 乐乐成语接龙 Lawrence Shi(Github:lawrenceshi bilibili:喜欢探究的乐乐)/Hao Shi(Github:hshi)')
 
     #mainloap
