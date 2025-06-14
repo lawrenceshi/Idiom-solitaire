@@ -50,3 +50,6 @@
         - requests
         - pandas
         - pillow
+      - 对于安装库，可以使用以下命令一键安装非python自带的库
+        `pip install -r requirements.txt`
+
