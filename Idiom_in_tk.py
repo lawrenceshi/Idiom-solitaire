@@ -63,7 +63,7 @@ class App(tk.Tk):
         logger.info("提示等待下载完成label创建完成")
         info_label_3.grid(row=1,column=1,columnspan=2,sticky=tk.EW)
         #创建url变量
-        self.csv_url = 'http://code.files.lawrenceshi.space/idiom-database-master/data/idiom.csv'
+        self.csv_url = 'https://raw.githubusercontent.com/lawrenceshi/Idiom-solitaire/refs/heads/main/idiom.csv'
         logger.info("url变量创建完成")
 
         #如果csv文件不存在
@@ -89,8 +89,8 @@ class App(tk.Tk):
         #set variable
         #一些变量的创建
         self.loop=0
-        self.image_url='http://code.files.lawrenceshi.space/idiom-database-master/data/img.jpg'
-        self.font_url='http://code.files.lawrenceshi.space/idiom-database-master/data/SmileySans-Oblique.ttf'
+        self.image_url='https://raw.githubusercontent.com/lawrenceshi/Idiom-solitaire/refs/heads/main/empty_zhengshu.jpg'
+        self.font_url='https://raw.githubusercontent.com/lawrenceshi/Idiom-solitaire/refs/heads/main/SmileySans-Oblique.ttf'
         self.csv = pd.read_csv(os.getcwd()+'\idiom.csv',encoding='utf-8')
         self.csv_word_list=self.csv['word'].tolist()
         self.csv_pinyin_list=self.csv['pinyin'].tolist()
