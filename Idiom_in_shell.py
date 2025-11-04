@@ -111,9 +111,9 @@ def mainif(name,input):
         logging.info("用户输入没有此成语")
         return '失败'
 print('本程序使用了idiom-database开源库,在此表示感谢')
-image_url='http://code.files.lawrenceshi.space/idiom-database-master/data/img.jpg'
-csv_url = 'http://code.files.lawrenceshi.space/idiom-database-master/data/idiom.csv'
-font_url='http://code.files.lawrenceshi.space/idiom-database-master/data/SmileySans-Oblique.ttf'
+image_url='https://raw.githubusercontent.com/lawrenceshi/Idiom-solitaire/refs/heads/main/empty_zhengshu.jpg'
+csv_url = 'https://raw.githubusercontent.com/lawrenceshi/Idiom-solitaire/refs/heads/main/idiom.csv'
+font_url='https://raw.githubusercontent.com/lawrenceshi/Idiom-solitaire/refs/heads/main/SmileySans-Oblique.ttf'
 ifzhengshu=False
 #csv_url='L:\乐乐\乐乐编程\乐乐python\成语接龙.csv'
 logging.info("调用函数'下载csv'开始!")
