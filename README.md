@@ -1,3 +1,6 @@
+# Archive For Now
+I Archived this repo for now, but I plan to improve the algorithm.
+
 # Idiom solitaire
  借助于idiom-database再次开发的成语接龙软件
  
