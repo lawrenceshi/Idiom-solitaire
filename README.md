@@ -55,4 +55,4 @@ I Archived this repo for now, but I plan to improve the algorithm.
         - pillow
       - 对于安装库，可以使用以下命令一键安装非python自带的库
         `pip install -r requirements.txt`
-- Checking dependencies.py 自动安装库的py文件，需要先安装os，默认安装到默认环境。
+- Checking dependencies.py 自动安装库的py文件，需要先安装os，安装到默认路径。
